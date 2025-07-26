@@ -5,6 +5,7 @@ import { useNotifications } from '../context/NotificationContext';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../context/AuthContext';
 import { Sun, Moon, User, Settings, Bell, LogOut, MessageCircle, Edit, Phone, MapPin, Github, Linkedin, Globe, Mail, Volume2, VolumeX, Eye, EyeOff, Shield, Lock, Trash2 } from 'lucide-react';
+import LogoutModal from '../components/auth/LogoutModal';
 
 const ProfilePage: React.FC = () => {
   const { user, logout, setUser } = useAuth();
@@ -16,6 +17,7 @@ const ProfilePage: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   // Editable fields
   const [name, setName] = useState(user?.username || '');
@@ -117,6 +119,7 @@ const ProfilePage: React.FC = () => {
         github,
         linkedin,
         portfolio,
+        role: user?.role ?? "user",
       });
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setShowEditModal(false);
@@ -173,6 +176,15 @@ const ProfilePage: React.FC = () => {
     }
   }, [user]);
 
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleLogoutConfirm = () => {
+    logout();
+    setIsLogoutModalOpen(false);
+  };
+
   return (
     <div className={`min-h-screen flex items-center justify-center bg-cyan-800 dark:bg-gray-900 p-4`}>
       <div className="flex flex-col md:flex-row gap-8 w-full max-w-5xl">
@@ -219,7 +231,7 @@ const ProfilePage: React.FC = () => {
             </button>
             <button
               className="flex items-center w-full py-2 px-4 rounded-lg hover:bg-cyan-50 dark:hover:bg-gray-700"
-              onClick={logout}
+              onClick={handleLogoutClick}
             >
               <LogOut className="w-5 h-5 mr-2" /> Log Out
             </button>
@@ -628,6 +640,13 @@ const ProfilePage: React.FC = () => {
             </div>
           </div>
         )}
+
+        {/* Logout Modal */}
+        <LogoutModal
+          isOpen={isLogoutModalOpen}
+          onClose={() => setIsLogoutModalOpen(false)}
+          onConfirm={handleLogoutConfirm}
+        />
       </div>
     </div>
   );

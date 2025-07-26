@@ -3,13 +3,57 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+
   html {
     font-family: 'Inter', system-ui, sans-serif;
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+    @apply bg-background text-foreground;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
@@ -18,7 +62,7 @@
   }
 
   ::selection {
-    @apply bg-primary-200 dark:bg-primary-800;
+    @apply bg-primary/20;
   }
 }
 
@@ -28,36 +72,35 @@
   }
 
   .btn-primary {
-    @apply bg-primary-600 text-white hover:bg-primary-700 dark:bg-primary-700 dark:hover:bg-primary-600;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90;
   }
 
   .btn-secondary {
-    @apply bg-secondary-600 text-white hover:bg-secondary-700 dark:bg-secondary-700 dark:hover:bg-secondary-600;
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
   }
 
   .btn-accent {
-    @apply bg-accent-500 text-white hover:bg-accent-600 dark:bg-accent-600 dark:hover:bg-accent-500;
+    @apply bg-accent text-accent-foreground hover:bg-accent/80;
   }
 
   .btn-outline {
-    @apply border border-gray-300 hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800;
+    @apply border border-input hover:bg-accent hover:text-accent-foreground;
   }
 
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden;
+    @apply bg-card text-card-foreground rounded-xl shadow-md overflow-hidden;
   }
 
   .input {
-    @apply w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
-    dark:bg-gray-700 dark:border-gray-600 dark:text-white;
+    @apply w-full px-4 py-2 rounded-md border border-input bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
   }
 
   .link {
-    @apply text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300;
+    @apply text-primary hover:text-primary/80;
   }
 
   .navbar {
-    @apply sticky top-0 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm z-50 shadow-sm;
+    @apply sticky top-0 bg-background/95 backdrop-blur-sm z-50 shadow-sm;
   }
 
   .container-custom {
@@ -69,7 +112,7 @@
   }
   
   .wave-bar {
-    @apply w-1 bg-primary-500 dark:bg-primary-400 rounded-t-sm animate-waveform;
+    @apply w-1 bg-primary rounded-t-sm animate-waveform;
   }
   
   .wave-bar:nth-child(2) {

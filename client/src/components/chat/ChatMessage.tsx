@@ -209,7 +209,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
               )}
               
               {/* Text content with sections */}
-              <div className="whitespace-pre-wrap">
+              <div className="whitespace-pre-wrap overflow-auto max-w-full break-words">
                 {isUser ? (
                   message.content
                 ) : (

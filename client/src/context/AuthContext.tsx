@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '../components/ui/use-toast';
 
 interface User {
   id?: string;
@@ -10,6 +12,7 @@ interface User {
   github?: string;
   linkedin?: string;
   portfolio?: string;
+  role: 'user' | 'admin';
 }
 
 interface AuthContextType {
@@ -89,12 +92,19 @@ api.interceptors.response.use(
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const parsedUser = JSON.parse(savedUser);
+        // Ensure role is set, default to 'user' if not present
+        if (!parsedUser.role) {
+          parsedUser.role = 'user';
+        }
+        setUser(parsedUser);
       } catch (error) {
         console.error('Auth error:', error);
         localStorage.removeItem('user');
@@ -108,20 +118,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (username: string, password: string) => {
     setIsLoading(true);
     try {
+      console.log('Attempting login for:', username);
       const response = await api.post('/login', {
         username,
         password
       });
 
-      const { user, access_token, refresh_token } = response.data;
-
-      localStorage.setItem('user', JSON.stringify(user));
+      const { user: userData, access_token, refresh_token } = response.data;
+      console.log('Login response:', { userData, hasAccessToken: !!access_token, hasRefreshToken: !!refresh_token });
+      
+      // Ensure role is set, default to 'user' if not present
+      if (!userData.role) {
+        userData.role = 'user';
+      }
+      
+      localStorage.setItem('user', JSON.stringify(userData));
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
-      setUser(user);
+      
+      // Verify token was stored
+      const storedToken = localStorage.getItem('access_token');
+      console.log('Stored token:', storedToken ? 'Token exists' : 'No token found');
+      
+      setUser(userData);
+
+      // Redirect based on role
+      if (userData.role === 'admin') {
+        console.log('Redirecting to admin dashboard');
+        navigate('/admin');
+      } else {
+        console.log('Redirecting to profile');
+        navigate('/profile');
+      }
     } catch (error: any) {
       console.error('Login error:', error);
-      throw new Error(error?.response?.data?.message || 'Login failed');
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: error?.response?.data?.detail || 'Failed to login. Please try again.'
+      });
+      throw new Error(error?.response?.data?.detail || 'Login failed');
     } finally {
       setIsLoading(false);
     }
@@ -137,22 +173,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         confirm_password: password
       });
 
-      const { user } = response.data;
-      localStorage.setItem('user', JSON.stringify(user));
-      setUser(user);
+      const { user: userData } = response.data;
+      
+      // Ensure role is set, default to 'user' if not present
+      if (!userData.role) {
+        userData.role = 'user';
+      }
+
+      localStorage.setItem('user', JSON.stringify(userData));
+      setUser(userData);
+
+      // Redirect based on role
+      if (userData.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/profile');
+      }
     } catch (error: any) {
       console.error('Signup error:', error);
-      throw new Error(error?.response?.data?.message || 'Signup failed');
+      toast({
+        variant: "destructive",
+        title: "Signup Failed",
+        description: error?.response?.data?.detail || 'Failed to create account. Please try again.'
+      });
+      throw new Error(error?.response?.data?.detail || 'Signup failed');
     } finally {
       setIsLoading(false);
     }
   };
 
   const logout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    setUser(null);
+    try {
+      localStorage.removeItem('user');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      setUser(null);
+      navigate('/auth');
+    } catch (error: any) {
+      console.error('Logout error:', error);
+      toast({
+        variant: "destructive",
+        title: "Logout Error",
+        description: 'Failed to logout properly. Please try again.'
+      });
+    }
   };
 
   const refreshAccessToken = async () => {

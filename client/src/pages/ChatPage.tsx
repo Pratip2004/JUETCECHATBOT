@@ -47,8 +47,8 @@ const ChatPage: React.FC = () => {
     { id: '9', name: 'Signal Processing', code: 'ECE203', year: '2', semester: '1' },
     
     // Year 2, Semester 2
-    { id: '10', name: 'Microcontrollers', code: 'ECE204', year: '2', semester: '2' },
-    { id: '11', name: 'Antenna Theory', code: 'ECE205', year: '2', semester: '2' },
+    { id: '10', name: 'Analog_Communication', code: 'ECE204', year: '2', semester: '2' },
+    { id: '11', name: 'Analog_Circuits', code: 'ECE205', year: '2', semester: '2' },
     { id: '12', name: 'Control Systems', code: 'ECE206', year: '2', semester: '2' },
     
     // Year 3, Semester 1

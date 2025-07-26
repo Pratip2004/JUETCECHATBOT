@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { FormErrors } from '../types';
-
+import { useToast } from '../components/ui/use-toast';
 
 const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,6 +18,7 @@ const AuthPage: React.FC = () => {
   
   const { login, signup } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const toggleAuthMode = () => {
     setIsLogin(!isLogin);
@@ -31,12 +32,12 @@ const AuthPage: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     
-  // Username validation
-if (!username) {
-  newErrors.username = 'Username is required';
-} else if (username.length < 4) {
-  newErrors.username = 'Username must be at least 4 characters';
-}
+    // Username validation
+    if (!username) {
+      newErrors.username = 'Username is required';
+    } else if (username.length < 4) {
+      newErrors.username = 'Username must be at least 4 characters';
+    }
     
     // Password validation
     if (!password) {
@@ -47,8 +48,10 @@ if (!username) {
     
     // Registration specific validations
     if (!isLogin) {
-      if (!username) {
-        newErrors.username = 'Username is required';
+      if (!email) {
+        newErrors.email = 'Email is required';
+      } else if (!/\S+@\S+\.\S+/.test(email)) {
+        newErrors.email = 'Please enter a valid email address';
       }
       
       if (!confirmPassword) {
@@ -59,9 +62,18 @@ if (!username) {
     }
     
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    
+    if (Object.keys(newErrors).length > 0) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please check the form for errors."
+      });
+      return false;
+    }
+    
+    return true;
   };
- 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

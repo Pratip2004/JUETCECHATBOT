@@ -9,11 +9,12 @@ import ProfilePage from './pages/ProfileSection';
 import ContactPage from './pages/ContactPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { useAuth } from './context/AuthContext';
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from './components/ui/toaster';
 import AboutPage from './pages/AboutPage';
+import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) {
     return (
@@ -33,31 +34,7 @@ function App() {
   }
 
   return (
-    <>
-      <Toaster 
-        position="top-right"
-        toastOptions={{
-          duration: 3000,
-          style: {
-            background: '#333',
-            color: '#fff',
-          },
-          success: {
-            duration: 3000,
-            style: {
-              background: '#4aed88',
-              color: '#fff',
-            },
-          },
-          error: {
-            duration: 4000,
-            style: {
-              background: '#ff4b4b',
-              color: '#fff',
-            },
-          },
-        }}
-      />
+    <div className="min-h-screen bg-gray-100">
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<LandingPage />} />
@@ -78,7 +55,6 @@ function App() {
             } 
           />
 
-          {/* Chat Route with Session ID support */}
           <Route 
             path="chat/*" 
             element={
@@ -88,12 +64,22 @@ function App() {
             } 
           />
 
+          <Route 
+            path="admin/*" 
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminDashboard />
+              </ProtectedRoute>
+            } 
+          />
+
           <Route path="contact" element={<ContactPage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
-    </>
+      <Toaster />
+    </div>
   );
 }
 

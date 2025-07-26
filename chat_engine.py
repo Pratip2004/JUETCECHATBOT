@@ -122,7 +122,7 @@ GUIDELINES:
     • Brief Explanation
     • Summary
 - Keep the response concise and to the point.
-- End with a brief summary.
+- **Always end with a brief summary or conclusion.**
 
 FINAL ANSWER:
 """
@@ -159,7 +159,7 @@ GUIDELINES:
     • Code (if applicable)  
 - Include mathematical expressions and formulas where relevant.
 - Provide detailed examples and applications.
-- End with a comprehensive conclusion.
+- **Always end with a comprehensive conclusion or summary.**
 
 FINAL ANSWER:
 """

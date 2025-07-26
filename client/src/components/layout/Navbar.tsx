@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sun, Moon, Cpu, User } from 'lucide-react';
+import { Menu, X, Sun, Moon, Cpu, User, Shield } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
@@ -79,6 +79,17 @@ const Navbar: React.FC = () => {
             >
               Profile
             </Link>
+            {user?.role === 'admin' && (
+              <Link 
+                to="/admin" 
+                className={`${baseClasses} ${location.pathname.startsWith('/admin') ? activeClasses : ''}`}
+              >
+                <div className="flex items-center">
+                  <Shield className="w-4 h-4 mr-1" />
+                  Admin
+                </div>
+              </Link>
+            )}
           </>
         )}
         <Link 

@@ -2,7 +2,7 @@ from fastapi import UploadFile, File, Form, HTTPException, Depends
 from typing import Optional
 from PIL import Image
 import io
-import fitz  # PyMuPDF
+import fitz 
 import pytesseract
 
 # Utility: Extract text and OCR text from PDF

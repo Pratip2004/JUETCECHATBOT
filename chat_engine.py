@@ -54,7 +54,7 @@ GUIDELINES:
     • Key Points  
     • Important Notes  
     • Code (if applicable)  
-- ⚠️ **Regardless of the content, your answer must always end with a proper "Conclusion" or "Summary" section that summarizes the answer clearly.**
+-  **Regardless of the content, your answer must always end with a proper "Conclusion" or "Summary" section that summarizes the answer clearly.**
 - Avoid including unsupported information.
 - Maintain an academic yet easy-to-understand tone.
 

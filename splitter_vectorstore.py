@@ -15,6 +15,6 @@ def build_vectorstore(chunks, persist_path=None):
 
     if persist_path:
         vectorstore.save_local(persist_path)
-        print(f"✅ Vector store saved at: {persist_path}")
+        print(f" Vector store saved at: {persist_path}")
 
     return vectorstore
